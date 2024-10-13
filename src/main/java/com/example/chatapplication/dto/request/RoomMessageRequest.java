@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class MessageRequest {
-	@JsonProperty("receiver_id")
-	@Size(max = 100)
-	private String receiverId;
+public class RoomMessageRequest {
+	@JsonProperty("room_id")
+	@Size(max = 128)
+	private String roomId;
 
 	@Size(max = 1024)
 	private String content;

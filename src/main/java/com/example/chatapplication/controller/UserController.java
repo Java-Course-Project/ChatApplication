@@ -6,6 +6,7 @@ import com.example.chatapplication.dto.response.PageResponse;
 import com.example.chatapplication.dto.response.UserResponse;
 import com.example.chatapplication.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class UserController {
 	private final UserService userService;
 
 	@GetMapping
-	public ResponseEntity<PageResponse<UserResponse>> findAll(UserFilter filter, Pageable pageable) {
+	public ResponseEntity<PageResponse<UserResponse>> findAll(@Valid UserFilter filter, Pageable pageable) {
 		return ResponseEntity.ok(userService.findAll(filter, pageable));
 	}
 
@@ -35,18 +36,19 @@ public class UserController {
 	}
 
 	@PutMapping("/{user-id}")
-	public ResponseEntity<String> update(@PathVariable(name = "user-id") String userId, @RequestBody @Valid UserRequest userRequest) {
+	public ResponseEntity<String> update(@PathVariable(name = "user-id") @Valid @Size(max = 100) String userId,
+										 @RequestBody @Valid UserRequest userRequest) {
 		return ResponseEntity.ok(userService.update(userRequest, userId));
 	}
 
 	@DeleteMapping("/{user-id}")
-	public ResponseEntity<Void> delete(@PathVariable(name = "user-id") String userId) {
+	public ResponseEntity<Void> delete(@PathVariable(name = "user-id") @Valid @Size(max = 100) String userId) {
 		userService.delete(userId);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{user-id}")
-	public ResponseEntity<UserResponse> findById(@PathVariable(name = "user-id") String userId) {
+	public ResponseEntity<UserResponse> findById(@PathVariable(name = "user-id") @Valid @Size(max = 100) String userId) {
 		return ResponseEntity.ok(userService.findById(userId));
 	}
 }

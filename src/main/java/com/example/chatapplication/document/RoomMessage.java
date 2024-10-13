@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
-@Document(collection = "messages")
-public class Message {
+@Document(collection = "room-messages")
+public class RoomMessage {
 	@Id
 	private String id;
 
@@ -20,9 +20,9 @@ public class Message {
 	@Indexed
 	private String senderId;
 
-	@Field(name = "receive_id")
+	@Field(name = "room_id")
 	@Indexed
-	private String receiverId;
+	private String roomId;
 
 	@TextIndexed
 	private String content;

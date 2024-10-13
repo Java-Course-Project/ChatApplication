@@ -2,19 +2,14 @@ package com.example.chatapplication.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import java.util.List;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserResponse {
+public class RoomResponse {
 	private String id;
-
-	private String username;
+	private String name;
+	private List<String> participants;
 	@JsonProperty("created_at")
 	private Instant createdAt;
 	@JsonProperty("created_by")

@@ -2,6 +2,7 @@ package com.example.chatapplication.document;
 
 import java.time.Instant;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
@@ -24,5 +25,6 @@ public class User {
 
 	@Field("created_by")
 	@Indexed(direction = IndexDirection.ASCENDING)
+	@CreatedBy
 	private String createdBy;
 }

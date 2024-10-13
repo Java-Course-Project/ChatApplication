@@ -5,7 +5,7 @@ import com.example.chatapplication.dto.request.UserFilter;
 import com.example.chatapplication.dto.request.UserRequest;
 import com.example.chatapplication.dto.response.PageResponse;
 import com.example.chatapplication.dto.response.UserResponse;
-import com.example.chatapplication.exception.ResourceNotFound;
+import com.example.chatapplication.exception.ResourceNotFoundException;
 import com.example.chatapplication.mapper.UserRequestToUserMapper;
 import com.example.chatapplication.mapper.UserToUserResponseMapper;
 import com.example.chatapplication.repository.UserRepository;
@@ -34,7 +34,7 @@ public class UserService {
 	}
 
 	public String update(UserRequest request, String id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFound("User with id " + id + " not found"));
+		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
 
 		user.setUsername(request.getUsername());
 		return userRepository.save(UserRequestToUserMapper.INSTANCE.map(request)).getId();
@@ -42,6 +42,6 @@ public class UserService {
 
 	public UserResponse findById(String id) {
 		return UserToUserResponseMapper.INSTANCE.map(
-				userRepository.findById(id).orElseThrow(() -> new ResourceNotFound("User with id " + id + " not found")));
+				userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found")));
 	}
 }

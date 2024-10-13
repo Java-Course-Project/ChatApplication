@@ -10,6 +10,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface MessageRequestToMessageMapper extends Mapper<MessageRequest, Message> {
 	MessageRequestToMessageMapper INSTANCE = Mappers.getMapper(MessageRequestToMessageMapper.class);
 
-	@Override
-	Message map(MessageRequest source);
+	Message map(MessageRequest source, String senderId);
 }

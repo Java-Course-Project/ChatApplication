@@ -1,34 +1,34 @@
 package com.example.chatapplication.document;
 
 import java.time.Instant;
+import java.util.List;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document(collection = "rooms")
 @Data
-@Document(collection = "messages")
-public class Message {
+@NoArgsConstructor
+public class Room {
 	@Id
 	private String id;
 
-	@Field(name = "sender_id")
-	@Indexed
-	private String senderId;
+	@Indexed(unique = true)
+	private String name;
 
-	@Field(name = "receive_id")
-	@Indexed
-	private String receiverId;
-
-	@TextIndexed
-	private String content;
+	@Field("participant_ids")
+	private List<String> participantIds;
 
 	@Field("created_at")
 	@CreatedDate
-	@Indexed(direction = IndexDirection.DESCENDING)
 	private Instant createdAt;
+
+	@Field("created_by")
+	@CreatedBy
+	private String createdBy;
 }
