@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
 	private final MessageService messageService;
 
+	// TODO: currently using short polling to get messages. Consider use long polling or websocket for better performance
 	@GetMapping("/users/{user-id}/messages")
 	public ResponseEntity<PageResponse<MessageResponse>> findAllBelongToUser(@PathVariable("user-id") @Valid @Size(max = 100) String userId,
 																			 MessageFilter filter,
