@@ -35,7 +35,7 @@ public class RateLimiterService {
 			String fullKey = RATE_LIMITER_KEY + ":" + key;
 			if (redisTemplate.opsForValue().get(fullKey) == null) {
 				redisTemplate.opsForValue().set(fullKey, "1", timeFrame);
-				return false;
+				return true;
 			}
 			Long currentToken = redisTemplate.opsForValue().increment(fullKey);
 			return currentToken != null && currentToken > tokenType.max;

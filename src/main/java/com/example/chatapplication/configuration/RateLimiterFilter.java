@@ -22,10 +22,11 @@ public class RateLimiterFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response,
 									@Nonnull FilterChain filterChain)
 			throws ServletException, IOException {
-		if (request.getRequestURI().startsWith("api")) {
+		String uri = request.getRequestURI();
+		if (!(uri.contains("swagger") || uri.contains("api-docs"))) {
 			String apiKey = request.getHeader("X-API-KEY");
 			if (apiKey == null) {
-				throw new ResourceNotFoundException("Api Key is required");
+				throw new ResourceNotFoundException("Api Key is required for path " + request.getRequestURI());
 			}
 			if (!limiterService.isRateLimited(RateLimiterService.LimiterTokenType.USER_REQUEST, apiKey)) {
 				throw new TooManyRequestException("Too many requests");
