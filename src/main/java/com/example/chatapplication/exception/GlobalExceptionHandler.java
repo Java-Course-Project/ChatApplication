@@ -1,8 +1,11 @@
 package com.example.chatapplication.exception;
 
 import com.example.chatapplication.dto.response.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoWriteException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -15,11 +18,26 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-	private static final Map<Class<? extends RuntimeException>, HttpStatus> HTTP_STATUS_MAP
+	public static final Map<Class<? extends RuntimeException>, HttpStatus> HTTP_STATUS_MAP
 			= Map.of(ResourceNotFoundException.class, HttpStatus.BAD_REQUEST,
 					 TooManyRequestException.class, HttpStatus.TOO_MANY_REQUESTS,
 					 UserNotInRoomException.class, HttpStatus.BAD_REQUEST,
 					 DuplicateKeyException.class, HttpStatus.BAD_REQUEST);
+
+	public static void buildExceptionHandler(RuntimeException ex, HttpServletRequest request, HttpServletResponse response,
+											 ObjectMapper objectMapper)  {
+
+		response.setStatus(HTTP_STATUS_MAP.get(ex.getClass()).value());
+		try {
+			response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.builder()
+																					.error(ex.getClass().getSimpleName())
+																					.message(ex.getMessage())
+																					.path(request.getRequestURI())
+																					.build()));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	@ExceptionHandler({ResourceNotFoundException.class, TooManyRequestException.class, UserNotInRoomException.class,
 			MongoWriteException.class})
