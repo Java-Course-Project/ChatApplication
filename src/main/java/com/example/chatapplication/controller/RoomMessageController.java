@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoomMessageController {
 	private final RoomMessageService roomMessageService;
 
-	@GetMapping("/users/{user-id}/room-messages")
-	public ResponseEntity<PageResponse<RoomMessageResponse>> findAll(@PathVariable("user-id") String senderId, RoomMessageFilter filter,
+	@GetMapping("/users/{user-id}/rooms/{room-id}/room-messages")
+	public ResponseEntity<PageResponse<RoomMessageResponse>> findAll(@PathVariable("user-id") String senderId,
+																	 @PathVariable("room-id") String roomId,
+																	 RoomMessageFilter filter,
 																	 Pageable pageable) {
-		return ResponseEntity.ok(roomMessageService.findAllBelongToUser(senderId, filter, pageable));
+		return ResponseEntity.ok(roomMessageService.findAllBelongToUserInRoom(senderId, roomId, filter, pageable));
 	}
 
 	@GetMapping("/room-messages/{room-message-id}")
@@ -32,8 +34,9 @@ public class RoomMessageController {
 		return ResponseEntity.ok(roomMessageService.findById(roomMessageId));
 	}
 
-	@PostMapping("/users/{user-id}/room-messages")
-	public ResponseEntity<String> save(@PathVariable("user-id") String senderId, @Valid @RequestBody RoomMessageRequest request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(roomMessageService.save(senderId, request));
+	@PostMapping("/users/{user-id}/rooms/{room-id}/room-messages")
+	public ResponseEntity<String> save(@PathVariable("user-id") String senderId,
+									   @PathVariable("room-id") String roomId, @Valid @RequestBody RoomMessageRequest request) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(roomMessageService.save(senderId, roomId, request));
 	}
 }

@@ -27,11 +27,12 @@ public class RoomMessageService {
 	private final RoomMessageRepository roomMessageRepository;
 	private final RoomRepository roomRepository;
 
-	public String save(String senderId, RoomMessageRequest request) {
-		RoomMessage roomMessage = RoomMessageRequestToRoomMessageMapper.INSTANCE.map(request, senderId);
+	public String save(String senderId, String roomId, RoomMessageRequest request) {
+		RoomMessage roomMessage = RoomMessageRequestToRoomMessageMapper.INSTANCE.map(request, roomId, senderId);
 
 		Room room = roomRepository.findById(roomMessage.getRoomId())
-								  .orElseThrow(() -> new ResourceNotFoundException("Room not with id " + roomMessage.getRoomId() + " not found"));
+								  .orElseThrow(() -> new ResourceNotFoundException(
+										  "Room not with id " + roomMessage.getRoomId() + " not found"));
 		if (!room.getParticipantIds().contains(senderId)) {
 			throw new UserNotInRoomException("User with id " + senderId + " not in room with id " + roomMessage.getRoomId());
 		}
@@ -44,10 +45,13 @@ public class RoomMessageService {
 				() -> new ResourceNotFoundException("Message with id " + roomMessageId + " not found")));
 	}
 
-	public PageResponse<RoomMessageResponse> findAllBelongToUser(String senderId, RoomMessageFilter filter, Pageable pageable) {
+	public PageResponse<RoomMessageResponse> findAllBelongToUserInRoom(String senderId, String roomId, RoomMessageFilter filter,
+																	   Pageable pageable) {
 		return RoomMessageToRoomMessageResponseMapper.INSTANCE.map(roomMessageRepository.findByCriteria(
-				new Query(stringEquals("senderId", senderId).andOperator(stringContains("content", filter.getContent()),
-																		 timeBetween("createdAt", filter.getFrom(), filter.getTo()))),
+				new Query(stringEquals("senderId", senderId).
+								  andOperator(stringContains("content", filter.getContent()),
+											  stringEquals("roomId", roomId),
+											  timeBetween("createdAt", filter.getFrom(), filter.getTo()))),
 				pageable, RoomMessage.class));
 	}
 }

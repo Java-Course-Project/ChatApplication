@@ -29,7 +29,7 @@ public class RoomService {
 		if (!userRepository.existsById(creatorId)) {
 			throw new ResourceNotFoundException("User with id " + creatorId + " not found");
 		}
-		return roomRepository.save(RoomRequestToRoomMapper.INSTANCE.map(roomRequest)).getId();
+		return roomRepository.save(RoomRequestToRoomMapper.INSTANCE.map(roomRequest, creatorId)).getId();
 	}
 
 	public void join(String participantId, String roomId) {

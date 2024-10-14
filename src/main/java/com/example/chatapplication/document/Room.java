@@ -1,7 +1,7 @@
 package com.example.chatapplication.document;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
@@ -22,7 +22,7 @@ public class Room {
 	private String name;
 
 	@Field("participant_ids")
-	private List<String> participantIds;
+	private Set<String> participantIds;
 
 	@Field("created_at")
 	@CreatedDate

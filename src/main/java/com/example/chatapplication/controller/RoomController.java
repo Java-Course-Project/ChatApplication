@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,13 +36,13 @@ public class RoomController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(roomService.save(creatorId, request));
 	}
 
-	@PutMapping("/users/{user-id}/rooms/{room-id}/join")
+	@PostMapping("/users/{user-id}/rooms/{room-id}/join")
 	public ResponseEntity<Void> join(@PathVariable(name = "user-id") String userId, @PathVariable(name = "room-id") String roomId) {
 		roomService.join(userId, roomId);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("/users/{user-id}/rooms/{room-id}/leave")
+	@PostMapping("/users/{user-id}/rooms/{room-id}/leave")
 	public ResponseEntity<Void> leave(@PathVariable(name = "user-id") String userId, @PathVariable(name = "room-id") String roomId) {
 		roomService.leave(userId, roomId);
 		return ResponseEntity.noContent().build();

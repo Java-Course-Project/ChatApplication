@@ -10,5 +10,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface RoomMessageRequestToRoomMessageMapper extends Mapper<RoomMessageRequest, RoomMessage> {
 	RoomMessageRequestToRoomMessageMapper INSTANCE = Mappers.getMapper(RoomMessageRequestToRoomMessageMapper.class);
 
-	RoomMessage map(RoomMessageRequest roomMessageRequest, String senderId);
+	RoomMessage map(RoomMessageRequest roomMessageRequest, String roomId, String senderId);
 }
