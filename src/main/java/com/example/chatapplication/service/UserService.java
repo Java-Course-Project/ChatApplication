@@ -37,7 +37,7 @@ public class UserService {
 		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
 
 		user.setUsername(request.getUsername());
-		return userRepository.save(UserRequestToUserMapper.INSTANCE.map(request)).getId();
+		return userRepository.save(user).getId();
 	}
 
 	public UserResponse findById(String id) {
